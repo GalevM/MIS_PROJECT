@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "690608672970",
+    "project_id": "mis-mgvg-project",
+    "storage_bucket": "mis-mgvg-project.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690608672970:android:653ffc1b550e6d9644e433",
+        "android_client_info": {
+          "package_name": "finki.uki.mk.mis_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjn-D2AkdPJv0sE5bcyErl0mUZX8PnXp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
