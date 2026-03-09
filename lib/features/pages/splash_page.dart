@@ -19,28 +19,34 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Future<void> _checkAuth() async {
     await Future.delayed(const Duration(seconds: 2));
 
-    // if (mounted) {
-    //   context.go('/login');
-    // } TODO: to stop infinite loader, make login page and remove comment
+    if (mounted) {
+      context.go('/login');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.location_city, size: 96, color: Colors.teal),
-            SizedBox(height: 24),
+            Image.asset(
+              'lib/assets/logo.png',
+              width: 155,
+              height: 155,
+            ),
+            const SizedBox(height: 24),
             Text(
               'Е-Општина',
-              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text('Граѓани + Општина = Решенија'),
-            SizedBox(height: 48),
-            CircularProgressIndicator(),
+            const SizedBox(height: 48),
+            const CircularProgressIndicator(),
           ],
         ),
       ),
