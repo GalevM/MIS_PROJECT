@@ -38,31 +38,15 @@ class HomePage extends StatelessWidget {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 children: [
-                  _menuCard(Icons.report, "Пријави проблем",
-                          () => context.go('/report')),
-                  _menuCard(Icons.map, "Јавна мапа",
-                          () => context.go('/map')),
-                  _menuCard(Icons.list, "Мои пријави",
-                          () => context.go('/myReports')),
+                  _menuCard(Icons.report, "Пријави проблем", //TODO: Move to Moi prijavi
+                          () => context.push('/report')),
                   _menuCard(Icons.poll, "Анкети",
-                          () => context.go('/polls')),
+                          () => context.push('/polls')),
                 ],
               ),
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: Colors.grey,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Почетна"),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: "Мапа"),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Мои пријави"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Профил"),
-        ],
       ),
     );
   }

@@ -1,17 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class MyReportsPage extends StatelessWidget {
   const MyReportsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final user = FirebaseAuth.instance.currentUser;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Мои Пријави")),
+      appBar: AppBar(
+        title: const Text("Мои Пријави"),
+        leading: BackButton(
+          onPressed: () {
+            context.pop();
+          },
+        ),
+      ),
 
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -19,7 +26,6 @@ class MyReportsPage extends StatelessWidget {
             .where("userId", isEqualTo: user?.uid)
             .snapshots(),
         builder: (context, snapshot) {
-
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -29,7 +35,6 @@ class MyReportsPage extends StatelessWidget {
           return ListView.builder(
             itemCount: reports.length,
             itemBuilder: (context, index) {
-
               final r = reports[index];
 
               return ListTile(

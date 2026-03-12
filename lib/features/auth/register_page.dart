@@ -19,6 +19,11 @@ class RegisterPage extends StatelessWidget {
             color: theme.colorScheme.onPrimary,
           ),
         ),
+        leading: BackButton(
+          onPressed: () {
+            context.pop();
+          },
+        ),
         elevation: 1,
         centerTitle: true,
       ),
@@ -29,10 +34,7 @@ class RegisterPage extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               // Logo
-              Image.asset(
-                'lib/assets/logo.png',
-                height: 100,
-              ),
+              Image.asset('lib/assets/logo.png', height: 100),
               const SizedBox(height: 20),
 
               Text(
@@ -54,8 +56,10 @@ class RegisterPage extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: theme.cardColor,
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -69,8 +73,10 @@ class RegisterPage extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: theme.cardColor,
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
@@ -85,8 +91,10 @@ class RegisterPage extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: theme.cardColor,
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
                 obscureText: true,
               ),
@@ -101,8 +109,10 @@ class RegisterPage extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: theme.cardColor,
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
                 obscureText: true,
               ),
@@ -114,7 +124,7 @@ class RegisterPage extends StatelessWidget {
                 height: 48,
                 child: ElevatedButton(
                   onPressed: () {
-                    context.go('/home');
+                    context.push('/home');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.secondary,
@@ -134,7 +144,7 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () {
-                  context.go('/login');
+                  context.push('/login');
                 },
                 child: Text(
                   'Веќе имате кориснички профил? Најавете се',

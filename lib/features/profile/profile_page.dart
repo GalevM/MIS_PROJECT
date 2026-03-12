@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -11,6 +12,11 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Мој Профил"),
+        leading: BackButton(
+          onPressed: () {
+            context.pop();
+          },
+        ),
         centerTitle: true,
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: theme.colorScheme.onPrimary,
@@ -24,7 +30,11 @@ class ProfilePage extends StatelessWidget {
             CircleAvatar(
               radius: 50,
               backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
-              child: const Icon(Icons.person, size: 60, color: Color(0xFF006064)),
+              child: const Icon(
+                Icons.person,
+                size: 60,
+                color: Color(0xFF006064),
+              ),
             ),
             const SizedBox(height: 12),
             Text(
@@ -40,9 +50,14 @@ class ProfilePage extends StatelessWidget {
             // Поени и ранг
             Card(
               elevation: 3,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [

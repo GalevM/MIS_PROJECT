@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:go_router/go_router.dart';
 
 class PublicMapPage extends StatefulWidget {
   const PublicMapPage({super.key});
@@ -21,8 +22,9 @@ class _PublicMapPageState extends State<PublicMapPage> {
   }
 
   Future<void> loadReports() async {
-    final snapshot =
-    await FirebaseFirestore.instance.collection("reports").get();
+    final snapshot = await FirebaseFirestore.instance
+        .collection("reports")
+        .get();
 
     for (var doc in snapshot.docs) {
       final data = doc.data();
@@ -49,7 +51,14 @@ class _PublicMapPageState extends State<PublicMapPage> {
   Widget build(BuildContext context) {
     final apiKey = dotenv.env['GEOAPIFY_KEY'];
     return Scaffold(
-      appBar: AppBar(title: const Text("Јавна Мапа")),
+      appBar: AppBar(
+        title: const Text("Јавна Мапа"),
+        leading: BackButton(
+          onPressed: () {
+            context.pop();
+          },
+        ),
+      ),
       body: FlutterMap(
         options: MapOptions(
           initialCenter: LatLng(41.9981, 21.4254), // Скопје како default
@@ -58,7 +67,7 @@ class _PublicMapPageState extends State<PublicMapPage> {
         children: [
           TileLayer(
             urlTemplate:
-            "https://maps.geoapify.com/v1/tile/osm-carto/{z}/{x}/{y}.png?apiKey=$apiKey",
+                "https://maps.geoapify.com/v1/tile/osm-carto/{z}/{x}/{y}.png?apiKey=$apiKey",
             userAgentPackageName: 'finki.uki.mk.mis_project',
           ),
           MarkerLayer(markers: markers),

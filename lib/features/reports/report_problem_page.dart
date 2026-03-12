@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 
 class ReportProblemPage extends ConsumerStatefulWidget {
   const ReportProblemPage({super.key});
@@ -70,9 +71,9 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
   Future<void> submitReport() async {
     final description = _descriptionController.text;
     if (_category == null || description.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Пополнете ги сите полиња")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Пополнете ги сите полиња")));
       return;
     }
 
@@ -106,9 +107,9 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
         _descriptionController.clear();
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Грешка: $e")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Грешка: $e")));
     }
   }
 
@@ -128,7 +129,14 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
   Widget build(BuildContext context) {
     final apiKey = dotenv.env['GEOAPIFY_KEY'];
     return Scaffold(
-      appBar: AppBar(title: const Text("Пријави проблем")),
+      appBar: AppBar(
+        title: const Text("Пријави проблем"),
+        leading: BackButton(
+          onPressed: () {
+            context.pop();
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
@@ -181,7 +189,7 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
                   children: [
                     TileLayer(
                       urlTemplate:
-                      "https://maps.geoapify.com/v1/tile/osm-carto/{z}/{x}/{y}.png?apiKey=$apiKey",
+                          "https://maps.geoapify.com/v1/tile/osm-carto/{z}/{x}/{y}.png?apiKey=$apiKey",
                       userAgentPackageName: 'finki.uki.mk.mis_project',
                     ),
                     MarkerLayer(
@@ -190,8 +198,11 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
                           point: LatLng(latitude!, longitude!),
                           width: 40,
                           height: 40,
-                          child: const Icon(Icons.location_on,
-                              color: Colors.red, size: 40),
+                          child: const Icon(
+                            Icons.location_on,
+                            color: Colors.red,
+                            size: 40,
+                          ),
                         ),
                       ],
                     ),

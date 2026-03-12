@@ -28,10 +28,7 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'lib/assets/logo.png',
-                height: 120,
-              ),
+              Image.asset('lib/assets/logo.png', height: 120),
               const SizedBox(height: 20),
 
               Text(
@@ -52,8 +49,10 @@ class LoginPage extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: theme.cardColor,
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
                 keyboardType: TextInputType.emailAddress,
               ),
@@ -68,8 +67,10 @@ class LoginPage extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: theme.cardColor,
-                  contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
                 obscureText: true,
               ),
@@ -80,7 +81,7 @@ class LoginPage extends StatelessWidget {
                 height: 48,
                 child: ElevatedButton(
                   onPressed: () {
-                    context.go('/home');
+                    context.push('/home');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.secondary,
@@ -101,7 +102,7 @@ class LoginPage extends StatelessWidget {
 
               TextButton(
                 onPressed: () {
-                  context.go('/register');
+                  context.push('/register');
                 },
                 child: Text(
                   'Немате кориснички профил? Регистрирајте се',

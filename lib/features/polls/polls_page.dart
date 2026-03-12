@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:go_router/go_router.dart';
 
 class PollsPage extends StatefulWidget {
   const PollsPage({super.key});
@@ -41,6 +42,11 @@ class _PollsPageState extends State<PollsPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Анкети"),
+        leading: BackButton(
+          onPressed: () {
+            context.pop();
+          },
+        ),
         centerTitle: true,
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: theme.colorScheme.onPrimary,
