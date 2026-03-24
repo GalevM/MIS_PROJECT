@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:go_router/go_router.dart';
 
-class ProfilePage extends StatelessWidget {
+import '../auth/auth_provider.dart';
+
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Мој Профил"),
-        leading: BackButton(
-          onPressed: () {
-            context.pop();
-          },
-        ),
+        leading: BackButton(onPressed: () => context.pop()),
         centerTitle: true,
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: theme.colorScheme.onPrimary,
@@ -26,7 +25,6 @@ class ProfilePage extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // Avatar + име
             CircleAvatar(
               radius: 50,
               backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
@@ -47,7 +45,6 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Поени и ранг
             Card(
               elevation: 3,
               shape: RoundedRectangleBorder(
@@ -69,7 +66,6 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // Историја на активности
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -85,6 +81,35 @@ class ProfilePage extends StatelessWidget {
 
             _activityItem("Пријава: Дупка на пат"),
             _activityItem("Гласано: Нови канти за ѓубре"),
+
+            const SizedBox(height: 40),
+
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  await ref.read(authNotifierProvider.notifier).logout();
+                  context.go('/login');
+                },
+                icon: const Icon(Icons.logout),
+                label: Text(
+                  'Одјави се',
+                  style: GoogleFonts.roboto(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red.shade600,
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 4,
+                ),
+              ),
+            ),
           ],
         ),
       ),
