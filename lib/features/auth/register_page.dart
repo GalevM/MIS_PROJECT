@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'auth_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -43,7 +42,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     setState(() => _errorMessage = null);
 
     if (_nameController.text.trim().isEmpty) {
-      setState(() => _errorMessage = 'Внесете ime и презиме.');
+      setState(() => _errorMessage = 'Внесете име и презиме.');
       return;
     }
     if (_passwordController.text != _confirmPasswordController.text) {
@@ -51,27 +50,35 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       return;
     }
 
-    await ref
-        .read(authNotifierProvider.notifier)
-        .register(_emailController.text, _passwordController.text);
+    try {
+      final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
 
-    final authState = ref.read(authNotifierProvider);
-    authState.whenOrNull(
-      error: (e, _) {
-        setState(() {
-          _errorMessage = e is FirebaseAuthException
-              ? _friendlyError(e)
-              : 'Настана грешка. Обидете се повторно.';
-        });
-      },
-      data: (_) => context.go('/home'),
-    );
+      await FirebaseFirestore.instance.collection('users').doc(credential.user!.uid).set({
+        'fullName': _nameController.text.trim(),
+        'email': _emailController.text.trim(),
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      if (mounted) {
+        context.go('/home');
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        _errorMessage = _friendlyError(e);
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Настана грешка. Обидете се повторно.';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isLoading = ref.watch(authNotifierProvider).isLoading;
 
     return Scaffold(
       appBar: AppBar(
@@ -201,7 +208,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                  onPressed: isLoading ? null : _register,
+                  onPressed: _register,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.secondary,
                     foregroundColor: theme.colorScheme.onSecondary,
@@ -214,16 +221,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 22,
-                          height: 22,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text('Регистрирај се'),
+                  child: const Text('Регистрирај се'),
                 ),
               ),
               const SizedBox(height: 16),
