@@ -141,58 +141,15 @@ class HomePage extends ConsumerWidget {
                       mainAxisSpacing: 10,
                       childAspectRatio: 1.0,
                       children: [
-                        _QuickAction(icon: Icons.map_outlined, label: 'Јавна Мапа', onTap: () => context.go('/map')),
-                        _QuickAction(icon: Icons.notifications_outlined, label: 'Известувања', onTap: () => context.go('/notifications')),
                         _QuickAction(icon: Icons.poll_outlined, label: 'Анкети', onTap: () => context.push('/polls')),
-                        _QuickAction(icon: Icons.list_alt_outlined, label: 'Мои Пријави', onTap: () => context.go('/my-reports')),
+                        _QuickAction(icon: Icons.list_alt_outlined, label: 'Мои Пријави', onTap: () => context.push('/my-reports')),
                         _QuickAction(icon: Icons.star_outline, label: 'Оценување', onTap: () {}),
-                        _QuickAction(icon: Icons.info_outlined, label: 'За нас', onTap: () {}),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-
-            // My reports list (latest 3)
-            myReports.when(
-              data: (reports) {
-                final latest = reports.take(3).toList();
-                if (latest.isEmpty) {
-                  return SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        child: Column(
-                          children: [
-                            const Icon(Icons.inbox_outlined, size: 36, color: AppTheme.textMuted),
-                            const SizedBox(height: 8),
-                            Text('Немате пријави', style: GoogleFonts.nunito(color: AppTheme.textMuted)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                }
-                return SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                        (ctx, i) {
-                      final r = latest[i];
-                      return _RecentReportTile(report: r);
-                    },
-                    childCount: latest.length,
-                  ),
-                );
-              },
-              loading: () => const SliverToBoxAdapter(child: Center(child: CircularProgressIndicator())),
-              error: (_, __) => const SliverToBoxAdapter(child: SizedBox.shrink()),
-            ),
-
             const SliverToBoxAdapter(child: SizedBox(height: 20)),
           ],
         ),

@@ -1,14 +1,13 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
+import 'package:cloudinary_public/cloudinary_public.dart';
 
 import '../../core/models/report_model.dart';
 import '../../core/themes/app_constants.dart';
 import '../auth/auth_provider.dart';
 
-// All public reports (for map)
 final allReportsProvider = StreamProvider<List<ReportModel>>((ref) {
   return FirebaseFirestore.instance
       .collection(AppConstants.reportsCol)
@@ -17,7 +16,6 @@ final allReportsProvider = StreamProvider<List<ReportModel>>((ref) {
       .map((s) => s.docs.map(ReportModel.fromFirestore).toList());
 });
 
-// My reports
 final myReportsProvider = StreamProvider<List<ReportModel>>((ref) {
   final user = ref.watch(currentUserProvider);
   if (user == null) return Stream.value([]);
@@ -29,8 +27,10 @@ final myReportsProvider = StreamProvider<List<ReportModel>>((ref) {
       .map((s) => s.docs.map(ReportModel.fromFirestore).toList());
 });
 
-// Single report
-final reportByIdProvider = StreamProvider.family<ReportModel?, String>((ref, id) {
+final reportByIdProvider = StreamProvider.family<ReportModel?, String>((
+  ref,
+  id,
+) {
   return FirebaseFirestore.instance
       .collection(AppConstants.reportsCol)
       .doc(id)
@@ -38,40 +38,36 @@ final reportByIdProvider = StreamProvider.family<ReportModel?, String>((ref, id)
       .map((s) => s.exists ? ReportModel.fromFirestore(s) : null);
 });
 
-// Stats
-final reportsStatsProvider = StreamProvider<Map<String, int>>((ref) {
-  return FirebaseFirestore.instance
-      .collection(AppConstants.reportsCol)
-      .snapshots()
-      .map((s) {
-    int received = 0, inProgress = 0, resolved = 0;
-    for (final doc in s.docs) {
-      final status = doc.data()['status'] as String? ?? '';
-      if (status == 'received') received++;
-      else if (status == 'in_progress') inProgress++;
-      else if (status == 'resolved') resolved++;
-    }
-    return {'received': received, 'in_progress': inProgress, 'resolved': resolved};
-  });
+final reportsStatsProvider = FutureProvider<Map<String, int>>((ref) async {
+  final col = FirebaseFirestore.instance.collection(AppConstants.reportsCol);
+  final results = await Future.wait([
+    col.where('status', isEqualTo: 'received').count().get(),
+    col.where('status', isEqualTo: 'in_progress').count().get(),
+    col.where('status', isEqualTo: 'resolved').count().get(),
+  ]);
+  return {
+    'received': results[0].count ?? 0,
+    'in_progress': results[1].count ?? 0,
+    'resolved': results[2].count ?? 0,
+  };
 });
 
-// Report category filter
 final categoryFilterProvider = StateProvider<String?>((ref) => null);
 final statusFilterProvider = StateProvider<String?>((ref) => null);
 
-// Filtered reports for map
 final filteredReportsProvider = Provider<AsyncValue<List<ReportModel>>>((ref) {
   final all = ref.watch(allReportsProvider);
   final catFilter = ref.watch(categoryFilterProvider);
   final statusFilter = ref.watch(statusFilterProvider);
-  return all.whenData((reports) => reports.where((r) {
-    if (catFilter != null && r.category != catFilter) return false;
-    if (statusFilter != null && r.status != statusFilter) return false;
-    return true;
-  }).toList());
+  return all.whenData(
+    (reports) => reports.where((r) {
+      if (catFilter != null && r.category != catFilter) return false;
+      if (statusFilter != null && r.status != statusFilter) return false;
+      return true;
+    }).toList(),
+  );
 });
 
-// Submit report action
 class ReportNotifier extends AsyncNotifier<void> {
   @override
   Future<void> build() async {}
@@ -95,29 +91,30 @@ class ReportNotifier extends AsyncNotifier<void> {
           .get();
       final fullName = userDoc.data()?['fullName'] ?? 'Анонимен';
 
-      // Upload images
       final imageUrls = <String>[];
-      for (final img in images) {
-        final fileName = '${const Uuid().v4()}.jpg';
-        final storageRef = FirebaseStorage.instance
-            .ref()
-            .child(AppConstants.reportImagesPath) // e.g. "reports/images"
-            .child(fileName);
 
-        final uploadTask = storageRef.putFile(
-          img,
-          SettableMetadata(contentType: 'image/jpeg'),
+      if (images.isNotEmpty) {
+        final cloudinary = CloudinaryPublic(
+          'dyaslvgbs',
+          'mis_project',
+          cache: false,
         );
-        final snapshot = await uploadTask.whenComplete(() {});
-        if (snapshot.state != TaskState.success) {
-          throw Exception('Upload не успеа за ${img.path}');
+
+        for (final img in images) {
+          final response = await cloudinary.uploadFile(
+            CloudinaryFile.fromFile(
+              img.path,
+              resourceType: CloudinaryResourceType.Image,
+              folder: 'reports',
+            ),
+          );
+          imageUrls.add(response.secureUrl);
         }
-        final downloadUrl = await snapshot.ref.getDownloadURL();
-        imageUrls.add(downloadUrl);
       }
 
-      // Create report doc
-      final docRef = FirebaseFirestore.instance.collection(AppConstants.reportsCol).doc();
+      final docRef = FirebaseFirestore.instance
+          .collection(AppConstants.reportsCol)
+          .doc();
       final report = ReportModel(
         id: docRef.id,
         userId: user.uid,
@@ -133,7 +130,6 @@ class ReportNotifier extends AsyncNotifier<void> {
       );
       await docRef.set(report.toFirestore());
 
-      // Award points
       await addPoints(user.uid, AppConstants.pointsReport);
 
       state = const AsyncData(null);
@@ -145,4 +141,6 @@ class ReportNotifier extends AsyncNotifier<void> {
   }
 }
 
-final reportNotifierProvider = AsyncNotifierProvider<ReportNotifier, void>(ReportNotifier.new);
+final reportNotifierProvider = AsyncNotifierProvider<ReportNotifier, void>(
+  ReportNotifier.new,
+);

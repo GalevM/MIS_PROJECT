@@ -1,16 +1,17 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:uuid/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uuid/uuid.dart';
 
 class ReportProblemPage extends ConsumerStatefulWidget {
   const ReportProblemPage({super.key});
@@ -26,6 +27,12 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
   double? latitude;
   double? longitude;
   final TextEditingController _descriptionController = TextEditingController();
+
+  final _cloudinary = CloudinaryPublic(
+    'dyaslvgbs',
+    'mis_project',
+    cache: false,
+  );
 
   String? get staticMapUrl {
     if (latitude == null || longitude == null) return null;
@@ -61,33 +68,54 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
     });
   }
 
-  Future<String> uploadImage(File image) async {
-    final id = const Uuid().v4();
-    final ref = FirebaseStorage.instance.ref().child("reports/$id.jpg");
-    await ref.putFile(image);
-    return await ref.getDownloadURL();
+  Future<String?> uploadImage(File image) async {
+    try {
+      final response = await _cloudinary.uploadFile(
+        CloudinaryFile.fromFile(
+          image.path,
+          resourceType: CloudinaryResourceType.Image,
+          folder: 'reports',
+        ),
+      );
+      return response.secureUrl;
+    } catch (e) {
+      debugPrint('Cloudinary upload error: $e');
+      return null;
+    }
   }
 
   Future<void> submitReport() async {
-    final description = _descriptionController.text;
-    if (_category == null || description.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Пополнете ги сите полиња")));
+    final description = _descriptionController.text.trim();
+
+    if (_category == null ||
+        description.isEmpty ||
+        latitude == null ||
+        longitude == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Пополнете ги сите полиња и локацијата")),
+      );
       return;
     }
 
     try {
       final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("Мора да сте најавени")));
+        return;
+      }
+
       String? imageUrl;
       if (_image != null) {
         imageUrl = await uploadImage(_image!);
       }
 
       final id = const Uuid().v4();
+
       await FirebaseFirestore.instance.collection("reports").doc(id).set({
         "id": id,
-        "userId": user?.uid,
+        "userId": user.uid,
         "category": _category,
         "description": description,
         "imageUrl": imageUrl ?? "",
@@ -105,6 +133,8 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
         _image = null;
         _category = null;
         _descriptionController.clear();
+        latitude = null;
+        longitude = null;
       });
     } catch (e) {
       ScaffoldMessenger.of(
@@ -128,13 +158,13 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
   @override
   Widget build(BuildContext context) {
     final apiKey = dotenv.env['GEOAPIFY_KEY'];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Пријави проблем"),
-        leading: BackButton(
-          onPressed: () {
-            context.pop();
-          },
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => context.pop(),
         ),
       ),
       body: SingleChildScrollView(
@@ -144,7 +174,7 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
             if (_image != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.file(_image!, height: 200),
+                child: Image.file(_image!, height: 200, fit: BoxFit.cover),
               ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
@@ -153,6 +183,7 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
               label: const Text("Додади слика"),
             ),
             const SizedBox(height: 20),
+
             DropdownButtonFormField<String>(
               value: _category,
               items: const [
@@ -168,6 +199,7 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
               ),
             ),
             const SizedBox(height: 20),
+
             TextField(
               controller: _descriptionController,
               maxLines: 4,
@@ -177,7 +209,7 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
               ),
             ),
             const SizedBox(height: 20),
-            // Geoapify Map
+
             if (latitude != null && longitude != null)
               SizedBox(
                 height: 250,
@@ -209,6 +241,7 @@ class _ReportProblemPageState extends ConsumerState<ReportProblemPage> {
                   ],
                 ),
               ),
+
             const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,

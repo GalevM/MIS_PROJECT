@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mis_project/features/reports/all_reports_page.dart';
 
 import '../../features/auth/login_page.dart';
 import '../../features/auth/register_page.dart';
@@ -63,6 +64,10 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/my-reports',
           pageBuilder: (_, __) => const NoTransitionPage(child: MyReportsPage()),
+        ),
+        GoRoute(
+          path: '/all-reports',
+          pageBuilder: (_, __) => const NoTransitionPage(child: AllReportsPage()),
         ),
         GoRoute(
           path: '/notifications',

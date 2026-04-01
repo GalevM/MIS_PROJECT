@@ -1,24 +1,43 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:uuid/uuid.dart';
+import 'package:cloudinary_public/cloudinary_public.dart';
 
 import 'report_model.dart';
 
 class ReportService {
   final _firestore = FirebaseFirestore.instance;
-  final _storage = FirebaseStorage.instance;
-  final _uuid = const Uuid();
+  final _cloudinary = CloudinaryPublic(
+    'dyaslvgbs',
+    'mis_project',
+    cache: false,
+  );
 
   Future<String> uploadImage(File file) async {
-    final id = _uuid.v4();
+    try {
+      final response = await _cloudinary.uploadFile(
+        CloudinaryFile.fromFile(
+          file.path,
+          resourceType: CloudinaryResourceType.Image,
+          folder: 'reports',
+        ),
+      );
+      return response.secureUrl;
+    } catch (e) {
+      throw Exception('Failed to upload image: $e');
+    }
+  }
 
-    final ref = _storage.ref().child('reports/$id.jpg');
+  /// Uploads multiple images and returns list of URLs
+  Future<List<String>> uploadImages(List<File> files) async {
+    final List<String> imageUrls = [];
 
-    await ref.putFile(file);
+    for (final file in files) {
+      final url = await uploadImage(file);
+      imageUrls.add(url);
+    }
 
-    return await ref.getDownloadURL();
+    return imageUrls;
   }
 
   Future<void> submitReport(ReportModel report) async {

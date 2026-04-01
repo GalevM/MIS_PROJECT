@@ -56,7 +56,7 @@ class _ReportFormPageState extends ConsumerState<ReportFormPage> {
       }
       final pos = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
-        timeLimit: const Duration(seconds: 10),
+        timeLimit: const Duration(seconds: 15),
       );
       _lat = pos.latitude;
       _lng = pos.longitude;
