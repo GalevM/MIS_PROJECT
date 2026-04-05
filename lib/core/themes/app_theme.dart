@@ -147,7 +147,6 @@ class AppTheme {
   }
 }
 
-// Status helpers
 extension ReportStatusExt on String {
   Color get statusColor {
     switch (this) {
