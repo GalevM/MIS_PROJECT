@@ -188,7 +188,7 @@ class ProfilePage extends ConsumerWidget {
 
                     _ProfileAction(
                       icon: Icons.list_alt_outlined, label: 'Мои пријави',
-                      onTap: () => context.go('/my-reports'),
+                      onTap: () => context.push('/my-reports'),
                     ),
                     _ProfileAction(
                       icon: Icons.poll_outlined, label: 'Анкети',
@@ -196,7 +196,7 @@ class ProfilePage extends ConsumerWidget {
                     ),
                     _ProfileAction(
                       icon: Icons.notifications_outlined, label: 'Известувања',
-                      onTap: () => context.go('/notifications'),
+                      onTap: () => context.push('/notifications'),
                     ),
                     const SizedBox(height: 8),
                     SizedBox(

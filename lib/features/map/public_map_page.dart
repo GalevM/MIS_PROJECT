@@ -119,6 +119,25 @@ class _MapPageState extends ConsumerState<MapPage> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Јавна Мапа')),
+
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 10,
+          bottom: MediaQuery.of(context).padding.bottom + 10,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _LegendItem(color: AppTheme.warning, label: 'Примено'),
+            _LegendItem(color: AppTheme.secondary, label: 'Во тек'),
+            _LegendItem(color: AppTheme.success, label: 'Решено'),
+          ],
+        ),
+      ),
+
       body: Column(
         children: [
           SingleChildScrollView(
@@ -187,19 +206,6 @@ class _MapPageState extends ConsumerState<MapPage> {
               error: (e, _) => Center(child: Text('Грешка: $e')),
             ),
           ),
-
-          Container(
-            color: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _LegendItem(color: AppTheme.warning, label: 'Примено'),
-                _LegendItem(color: AppTheme.secondary, label: 'Во тек'),
-                _LegendItem(color: AppTheme.success, label: 'Решено'),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -208,27 +214,61 @@ class _MapPageState extends ConsumerState<MapPage> {
   void _showCategoryFilter(BuildContext context, WidgetRef ref) {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (_) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 12),
-            Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.grey[300], borderRadius: BorderRadius.circular(4))),
-            const SizedBox(height: 12),
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text('Избери категорија', style: GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.w800))),
-            ListTile(
-              leading: const Text('🔍', style: TextStyle(fontSize: 20)),
-              title: Text('Сите', style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
-              onTap: () { ref.read(categoryFilterProvider.notifier).state = null; Navigator.pop(context); },
-            ),
-            ...AppConstants.categories.map((cat) => ListTile(
-              leading: Text(cat['emoji']!, style: const TextStyle(fontSize: 20)),
-              title: Text(cat['label']!, style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
-              onTap: () { ref.read(categoryFilterProvider.notifier).state = cat['value']; Navigator.pop(context); },
-            )),
-          ],
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => DraggableScrollableSheet(
+        expand: false,
+        initialChildSize: 0.5,
+        minChildSize: 0.3,
+        maxChildSize: 0.85,
+        builder: (_, scrollController) => SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                width: 40, height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  'Избери категорија',
+                  style: GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.w800),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Expanded(
+                child: ListView(
+                  controller: scrollController,
+                  children: [
+                    ListTile(
+                      leading: const Text('🔍', style: TextStyle(fontSize: 20)),
+                      title: Text('Сите', style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
+                      onTap: () {
+                        ref.read(categoryFilterProvider.notifier).state = null;
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ...AppConstants.categories.map((cat) => ListTile(
+                      leading: Text(cat['emoji']!, style: const TextStyle(fontSize: 20)),
+                      title: Text(cat['label']!, style: GoogleFonts.nunito(fontWeight: FontWeight.w700)),
+                      onTap: () {
+                        ref.read(categoryFilterProvider.notifier).state = cat['value'];
+                        Navigator.pop(context);
+                      },
+                    )),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

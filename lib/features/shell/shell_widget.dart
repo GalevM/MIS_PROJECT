@@ -28,7 +28,7 @@ class ShellPage extends StatelessWidget {
             case 0: context.go('/home');
             case 1: context.go('/map');
            // case 2: context.go('/all-reports');
-            case 2: context.go('/notifications');
+            case 2: context.push('/notifications');
             case 3: context.go('/profile');
           }
         },
