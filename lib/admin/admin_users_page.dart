@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mis_project/core/themes/app_theme.dart';
-
 import 'admin_provider.dart';
 
 class AdminUsersPage extends ConsumerStatefulWidget {
@@ -50,7 +49,6 @@ class _AdminUsersPageState extends ConsumerState<AdminUsersPage> {
 
     return Column(
       children: [
-        // Search
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
           child: TextField(
@@ -113,7 +111,6 @@ class _AdminUsersPageState extends ConsumerState<AdminUsersPage> {
                       boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 6)],
                     ),
                     child: Row(children: [
-                      // Avatar
                       Container(
                         width: 46, height: 46,
                         decoration: BoxDecoration(
@@ -127,7 +124,6 @@ class _AdminUsersPageState extends ConsumerState<AdminUsersPage> {
                       ),
                       const SizedBox(width: 12),
 
-                      // Info
                       Expanded(child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -163,7 +159,6 @@ class _AdminUsersPageState extends ConsumerState<AdminUsersPage> {
                         ],
                       )),
 
-                      // Menu
                       PopupMenuButton<String>(
                         icon: const Icon(Icons.more_vert, color: AppTheme.textMuted),
                         onSelected: (role) => _confirmRole(uid, name.isNotEmpty ? name : 'корисникот', role),

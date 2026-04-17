@@ -28,7 +28,6 @@ class ReportService {
     }
   }
 
-  /// Uploads multiple images and returns list of URLs
   Future<List<String>> uploadImages(List<File> files) async {
     final List<String> imageUrls = [];
 
@@ -50,9 +49,9 @@ class ReportService {
         .where('userId', isEqualTo: userId)
         .snapshots()
         .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => ReportModel.fromMap(doc.data()))
-          .toList();
-    });
+          return snapshot.docs
+              .map((doc) => ReportModel.fromMap(doc.data()))
+              .toList();
+        });
   }
 }

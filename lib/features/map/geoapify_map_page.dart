@@ -20,13 +20,13 @@ class GeoapifyMapPage extends StatelessWidget {
       appBar: AppBar(title: const Text("Geoapify Map")),
       body: FlutterMap(
         options: MapOptions(
-          initialCenter: LatLng(latitude, longitude), // исправено
-          initialZoom: 14,                            // исправено
+          initialCenter: LatLng(latitude, longitude),
+          initialZoom: 14,
         ),
         children: [
           TileLayer(
             urlTemplate:
-            "https://maps.geoapify.com/v1/tile/osm-carto/{z}/{x}/{y}.png?apiKey=$apiKey",
+                "https://maps.geoapify.com/v1/tile/osm-carto/{z}/{x}/{y}.png?apiKey=$apiKey",
             userAgentPackageName: 'com.example.mis_project',
           ),
           MarkerLayer(
@@ -35,7 +35,7 @@ class GeoapifyMapPage extends StatelessWidget {
                 point: LatLng(latitude, longitude),
                 width: 40,
                 height: 40,
-                child: const Icon( // исправено: child наместо builder
+                child: const Icon(
                   Icons.location_on,
                   color: Colors.red,
                   size: 40,

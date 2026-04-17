@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class AppTheme {
   static const Color primary = Color(0xFF1565C0);
   static const Color primaryDark = Color(0xFF0D47A1);
@@ -36,25 +35,39 @@ class AppTheme {
       cardColor: surface,
       textTheme: GoogleFonts.nunitoTextTheme().copyWith(
         headlineLarge: GoogleFonts.nunito(
-          fontSize: 28, fontWeight: FontWeight.w800, color: textPrimary,
+          fontSize: 28,
+          fontWeight: FontWeight.w800,
+          color: textPrimary,
         ),
         headlineMedium: GoogleFonts.nunito(
-          fontSize: 22, fontWeight: FontWeight.w800, color: textPrimary,
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
+          color: textPrimary,
         ),
         titleLarge: GoogleFonts.nunito(
-          fontSize: 18, fontWeight: FontWeight.w700, color: textPrimary,
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: textPrimary,
         ),
         titleMedium: GoogleFonts.nunito(
-          fontSize: 15, fontWeight: FontWeight.w700, color: textPrimary,
+          fontSize: 15,
+          fontWeight: FontWeight.w700,
+          color: textPrimary,
         ),
         bodyLarge: GoogleFonts.nunito(
-          fontSize: 15, fontWeight: FontWeight.w400, color: textPrimary,
+          fontSize: 15,
+          fontWeight: FontWeight.w400,
+          color: textPrimary,
         ),
         bodyMedium: GoogleFonts.nunito(
-          fontSize: 13, fontWeight: FontWeight.w400, color: textMuted,
+          fontSize: 13,
+          fontWeight: FontWeight.w400,
+          color: textMuted,
         ),
         labelSmall: GoogleFonts.nunito(
-          fontSize: 11, fontWeight: FontWeight.w700, color: textMuted,
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: textMuted,
           letterSpacing: 0.5,
         ),
       ),
@@ -64,7 +77,9 @@ class AppTheme {
         centerTitle: true,
         elevation: 2,
         titleTextStyle: GoogleFonts.nunito(
-          fontSize: 18, fontWeight: FontWeight.w800, color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.w800,
+          color: Colors.white,
         ),
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -73,9 +88,14 @@ class AppTheme {
           backgroundColor: secondary,
           foregroundColor: Colors.white,
           minimumSize: const Size(double.infinity, 50),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           elevation: 3,
-          textStyle: GoogleFonts.nunito(fontSize: 16, fontWeight: FontWeight.w800),
+          textStyle: GoogleFonts.nunito(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+          ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -83,14 +103,22 @@ class AppTheme {
           foregroundColor: primary,
           side: const BorderSide(color: primary, width: 1.5),
           minimumSize: const Size(double.infinity, 50),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          textStyle: GoogleFonts.nunito(fontSize: 15, fontWeight: FontWeight.w700),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          textStyle: GoogleFonts.nunito(
+            fontSize: 15,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surface,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 13,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFFCFD8DC)),
@@ -107,7 +135,10 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: error),
         ),
-        labelStyle: GoogleFonts.nunito(color: textMuted, fontWeight: FontWeight.w600),
+        labelStyle: GoogleFonts.nunito(
+          color: textMuted,
+          fontWeight: FontWeight.w600,
+        ),
         hintStyle: GoogleFonts.nunito(color: const Color(0xFFB0BEC5)),
       ),
       cardTheme: CardThemeData(
@@ -120,7 +151,9 @@ class AppTheme {
       chipTheme: ChipThemeData(
         backgroundColor: primaryLight,
         labelStyle: GoogleFonts.nunito(
-          fontSize: 12, fontWeight: FontWeight.w700, color: primary,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          color: primary,
         ),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -129,8 +162,14 @@ class AppTheme {
         backgroundColor: surface,
         selectedItemColor: primary,
         unselectedItemColor: const Color(0xFF90A4AE),
-        selectedLabelStyle: GoogleFonts.nunito(fontSize: 11, fontWeight: FontWeight.w800),
-        unselectedLabelStyle: GoogleFonts.nunito(fontSize: 11, fontWeight: FontWeight.w600),
+        selectedLabelStyle: GoogleFonts.nunito(
+          fontSize: 11,
+          fontWeight: FontWeight.w800,
+        ),
+        unselectedLabelStyle: GoogleFonts.nunito(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+        ),
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),
@@ -141,7 +180,9 @@ class AppTheme {
         behavior: SnackBarBehavior.floating,
       ),
       dividerTheme: const DividerThemeData(
-        color: Color(0xFFECEFF1), thickness: 1, space: 1,
+        color: Color(0xFFECEFF1),
+        thickness: 1,
+        space: 1,
       ),
     );
   }
@@ -150,63 +191,95 @@ class AppTheme {
 extension ReportStatusExt on String {
   Color get statusColor {
     switch (this) {
-      case 'received': return AppTheme.warning;
-      case 'in_progress': return AppTheme.inProgress;
-      case 'resolved': return AppTheme.success;
-      default: return AppTheme.textMuted;
+      case 'received':
+        return AppTheme.warning;
+      case 'in_progress':
+        return AppTheme.inProgress;
+      case 'resolved':
+        return AppTheme.success;
+      default:
+        return AppTheme.textMuted;
     }
   }
 
   Color get statusBgColor {
     switch (this) {
-      case 'received': return AppTheme.warningLight;
-      case 'in_progress': return AppTheme.inProgressLight;
-      case 'resolved': return AppTheme.successLight;
-      default: return AppTheme.background;
+      case 'received':
+        return AppTheme.warningLight;
+      case 'in_progress':
+        return AppTheme.inProgressLight;
+      case 'resolved':
+        return AppTheme.successLight;
+      default:
+        return AppTheme.background;
     }
   }
 
   String get statusLabel {
     switch (this) {
-      case 'received': return 'Примено';
-      case 'in_progress': return 'Во тек';
-      case 'resolved': return 'Решено';
-      default: return 'Непознато';
+      case 'received':
+        return 'Примено';
+      case 'in_progress':
+        return 'Во тек';
+      case 'resolved':
+        return 'Решено';
+      default:
+        return 'Непознато';
     }
   }
 
   String get statusEmoji {
     switch (this) {
-      case 'received': return '🟡';
-      case 'in_progress': return '🔵';
-      case 'resolved': return '🟢';
-      default: return '⚪';
+      case 'received':
+        return '🟡';
+      case 'in_progress':
+        return '🔵';
+      case 'resolved':
+        return '🟢';
+      default:
+        return '⚪';
     }
   }
 
   String get categoryLabel {
     switch (this) {
-      case 'road': return 'Дупка на пат';
-      case 'garbage': return 'Ѓубре';
-      case 'lighting': return 'Улично светло';
-      case 'illegal_dump': return 'Дива депонија';
-      case 'park': return 'Парк / зеленило';
-      case 'water': return 'Водоснабдување';
-      case 'other': return 'Друго';
-      default: return this;
+      case 'road':
+        return 'Дупка на пат';
+      case 'garbage':
+        return 'Ѓубре';
+      case 'lighting':
+        return 'Улично светло';
+      case 'illegal_dump':
+        return 'Дива депонија';
+      case 'park':
+        return 'Парк / зеленило';
+      case 'water':
+        return 'Водоснабдување';
+      case 'other':
+        return 'Друго';
+      default:
+        return this;
     }
   }
 
   String get categoryEmoji {
     switch (this) {
-      case 'road': return '🚧';
-      case 'garbage': return '🗑️';
-      case 'lighting': return '💡';
-      case 'illegal_dump': return '⚠️';
-      case 'park': return '🌳';
-      case 'water': return '💧';
-      case 'other': return '📌';
-      default: return '📌';
+      case 'road':
+        return '🚧';
+      case 'garbage':
+        return '🗑️';
+      case 'lighting':
+        return '💡';
+      case 'illegal_dump':
+        return '⚠️';
+      case 'park':
+        return '🌳';
+      case 'water':
+        return '💧';
+      case 'other':
+        return '📌';
+      default:
+        return '📌';
     }
   }
 }

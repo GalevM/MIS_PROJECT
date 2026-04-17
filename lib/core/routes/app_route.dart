@@ -24,9 +24,7 @@ import '../../features/reports/report_from_page.dart';
 import '../../features/shell/shell_widget.dart';
 import '../notifications/notifications_page.dart';
 
-
-
-final _rootNavigatorKey  = GlobalKey<NavigatorState>();
+final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final appRouter = GoRouter(
@@ -36,7 +34,8 @@ final appRouter = GoRouter(
   redirect: (context, state) {
     final user = FirebaseAuth.instance.currentUser;
     final isAuth = user != null;
-    final isAuthRoute = state.matchedLocation == '/login' ||
+    final isAuthRoute =
+        state.matchedLocation == '/login' ||
         state.matchedLocation == '/register';
 
     if (!isAuth && !isAuthRoute) return '/login';
@@ -46,24 +45,44 @@ final appRouter = GoRouter(
   refreshListenable: GoRouterRefreshStream(
     FirebaseAuth.instance.authStateChanges(),
   ),
-  errorBuilder: (context, state) => Scaffold(
-    body: Center(child: Text('Route не е пронајден: ${state.uri}')),
-  ),
+  errorBuilder: (context, state) =>
+      Scaffold(body: Center(child: Text('Route не е пронајден: ${state.uri}'))),
   routes: [
-    GoRoute(path: '/login',    builder: (_, __) => const LoginPage()),
+    GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
     GoRoute(path: '/register', builder: (_, __) => const RegisterPage()),
-    GoRoute(path: '/',         builder: (_, __) => const SplashPage()),
+    GoRoute(path: '/', builder: (_, __) => const SplashPage()),
 
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) => ShellPage(child: child),
       routes: [
-        GoRoute(path: '/home',         pageBuilder: (_, __) => const NoTransitionPage(child: HomePage())),
-        GoRoute(path: '/map',          pageBuilder: (_, __) => const NoTransitionPage(child: MapPage())),
-        GoRoute(path: '/all-reports',  pageBuilder: (_, __) => const NoTransitionPage(child: AllReportsPage())),
-        GoRoute(path: '//my-reports',  pageBuilder: (_, __) => const NoTransitionPage(child: MyReportsPage())),
-        GoRoute(path: '/notifications',pageBuilder: (_, __) => const NoTransitionPage(child: NotificationsPage())),
-        GoRoute(path: '/profile',      pageBuilder: (_, __) => const NoTransitionPage(child: ProfilePage())),
+        GoRoute(
+          path: '/home',
+          pageBuilder: (_, __) => const NoTransitionPage(child: HomePage()),
+        ),
+        GoRoute(
+          path: '/map',
+          pageBuilder: (_, __) => const NoTransitionPage(child: MapPage()),
+        ),
+        GoRoute(
+          path: '/all-reports',
+          pageBuilder: (_, __) =>
+              const NoTransitionPage(child: AllReportsPage()),
+        ),
+        GoRoute(
+          path: '//my-reports',
+          pageBuilder: (_, __) =>
+              const NoTransitionPage(child: MyReportsPage()),
+        ),
+        GoRoute(
+          path: '/notifications',
+          pageBuilder: (_, __) =>
+              const NoTransitionPage(child: NotificationsPage()),
+        ),
+        GoRoute(
+          path: '/profile',
+          pageBuilder: (_, __) => const NoTransitionPage(child: ProfilePage()),
+        ),
       ],
     ),
 
@@ -93,21 +112,33 @@ final appRouter = GoRouter(
     ShellRoute(
       builder: (_, state, child) {
         final titles = {
-          '/admin':               'Admin — Преглед',
-          '/admin/reports':       'Admin — Пријави',
+          '/admin': 'Admin — Преглед',
+          '/admin/reports': 'Admin — Пријави',
           '/admin/notifications': 'Admin — Известувања',
-          '/admin/polls':         'Admin — Анкети',
-          '/admin/users':         'Admin — Корисници',
+          '/admin/polls': 'Admin — Анкети',
+          '/admin/users': 'Admin — Корисници',
         };
         final title = titles[state.matchedLocation] ?? 'Admin';
         return AdminShell(child: child, title: title);
       },
       routes: [
-        GoRoute(path: '/admin',                builder: (_, __) => const AdminDashboardPage()),
-        GoRoute(path: '/admin/reports',        builder: (_, __) => const AdminReportsPage()),
-        GoRoute(path: '/admin/notifications',  builder: (_, __) => const AdminNotificationsPage()),
-        GoRoute(path: '/admin/polls',          builder: (_, __) => const AdminPollsPage()),
-        GoRoute(path: '/admin/users',          builder: (_, __) => const AdminUsersPage()),
+        GoRoute(path: '/admin', builder: (_, __) => const AdminDashboardPage()),
+        GoRoute(
+          path: '/admin/reports',
+          builder: (_, __) => const AdminReportsPage(),
+        ),
+        GoRoute(
+          path: '/admin/notifications',
+          builder: (_, __) => const AdminNotificationsPage(),
+        ),
+        GoRoute(
+          path: '/admin/polls',
+          builder: (_, __) => const AdminPollsPage(),
+        ),
+        GoRoute(
+          path: '/admin/users',
+          builder: (_, __) => const AdminUsersPage(),
+        ),
       ],
     ),
 
@@ -123,8 +154,7 @@ final appRouter = GoRouter(
 class GoRouterRefreshStream extends ChangeNotifier {
   GoRouterRefreshStream(Stream<dynamic> stream) {
     notifyListeners();
-    _subscription =
-        stream.asBroadcastStream().listen((_) => notifyListeners());
+    _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
   }
 
   late final dynamic _subscription;

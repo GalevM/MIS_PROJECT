@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:mis_project/core/themes/app_theme.dart';
-
 import '../core/notifications/notification_model.dart';
 import 'admin_provider.dart';
-
 
 class AdminNotificationsPage extends ConsumerStatefulWidget {
   const AdminNotificationsPage({super.key});
@@ -98,7 +96,6 @@ class _AdminNotificationsPageState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Create form ───────────────────────────────────────────────
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -117,7 +114,6 @@ class _AdminNotificationsPageState
                 ]),
                 const SizedBox(height: 14),
 
-                // Type chips
                 Text('Тип', style: GoogleFonts.nunito(
                     fontSize: 12, fontWeight: FontWeight.w800, color: AppTheme.textMuted)),
                 const SizedBox(height: 8),
@@ -149,7 +145,6 @@ class _AdminNotificationsPageState
                     );
                   }).toList(),
                 ),
-
                 const SizedBox(height: 14),
                 Text('Наслов', style: GoogleFonts.nunito(
                     fontSize: 12, fontWeight: FontWeight.w800, color: AppTheme.textMuted)),
@@ -159,7 +154,6 @@ class _AdminNotificationsPageState
                   decoration: const InputDecoration(
                       hintText: 'Пр. Прекин на водоснабдување'),
                 ),
-
                 const SizedBox(height: 12),
                 Text('Содржина', style: GoogleFonts.nunito(
                     fontSize: 12, fontWeight: FontWeight.w800, color: AppTheme.textMuted)),
@@ -170,7 +164,6 @@ class _AdminNotificationsPageState
                   decoration: const InputDecoration(
                       hintText: 'Пр. Прекин во периодот 09:00 – 14:00...'),
                 ),
-
                 const SizedBox(height: 16),
                 SizedBox(
                   width: double.infinity,

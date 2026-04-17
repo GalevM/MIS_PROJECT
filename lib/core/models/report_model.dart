@@ -66,10 +66,18 @@ class ReportModel {
   };
 
   ReportModel copyWith({String? status, String? adminNote}) => ReportModel(
-    id: id, userId: userId, userFullName: userFullName,
-    category: category, description: description,
-    status: status ?? this.status, latitude: latitude, longitude: longitude,
-    address: address, imageUrls: imageUrls, createdAt: createdAt,
-    updatedAt: DateTime.now(), adminNote: adminNote ?? this.adminNote,
+    id: id,
+    userId: userId,
+    userFullName: userFullName,
+    category: category,
+    description: description,
+    status: status ?? this.status,
+    latitude: latitude,
+    longitude: longitude,
+    address: address,
+    imageUrls: imageUrls,
+    createdAt: createdAt,
+    updatedAt: DateTime.now(),
+    adminNote: adminNote ?? this.adminNote,
   );
 }

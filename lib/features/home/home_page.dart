@@ -14,7 +14,6 @@ class HomePage extends ConsumerWidget {
     final theme = Theme.of(context);
     final userDoc = ref.watch(currentUserDocProvider);
     final stats = ref.watch(reportsStatsProvider);
-    final myReports = ref.watch(myReportsProvider);
 
     final userName =
         userDoc.valueOrNull?['fullName']?.toString().split(' ').first ??
@@ -45,7 +44,6 @@ class HomePage extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Welcome banner
                   Container(
                     margin: const EdgeInsets.all(16),
                     padding: const EdgeInsets.all(25),
@@ -195,6 +193,11 @@ class HomePage extends ConsumerWidget {
                       childAspectRatio: 0.8,
                       children: [
                         _QuickAction(
+                          icon: Icons.star_outline,
+                          label: 'Известувања',
+                          onTap: () => context.push('/notifications'),
+                        ),
+                        _QuickAction(
                           icon: Icons.poll_outlined,
                           label: 'Анкети',
                           onTap: () => context.push('/polls'),
@@ -203,11 +206,6 @@ class HomePage extends ConsumerWidget {
                           icon: Icons.list_alt_outlined,
                           label: 'Сите Пријави',
                           onTap: () => context.push('/all-reports'),
-                        ),
-                        _QuickAction(
-                          icon: Icons.star_outline,
-                          label: 'Оценување',
-                          onTap: () {},
                         ),
                       ],
                     ),
@@ -240,7 +238,7 @@ class _StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: SizedBox(
-        height: 140, // 🔹 фиксна висина за да изгледа поголемо
+        height: 140,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
           decoration: BoxDecoration(
@@ -283,7 +281,6 @@ class _StatCard extends StatelessWidget {
     );
   }
 }
-
 
 class _QuickAction extends StatelessWidget {
   final IconData icon;

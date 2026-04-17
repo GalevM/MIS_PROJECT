@@ -31,11 +31,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/logo.png',
-              width: 155,
-              height: 155,
-            ),
+            Image.asset('assets/logo.png', width: 155, height: 155),
             const SizedBox(height: 24),
             Text(
               'Е-Општина',

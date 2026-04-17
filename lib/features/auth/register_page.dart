@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'auth_provider.dart';
 
-
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
 
@@ -41,17 +40,23 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       setState(() => _error = 'Лозинките не се совпаѓаат.');
       return;
     }
-    await ref.read(authNotifierProvider.notifier).register(
-      fullName: _nameCtrl.text,
-      email: _emailCtrl.text,
-      password: _passCtrl.text,
-    );
+    await ref
+        .read(authNotifierProvider.notifier)
+        .register(
+          fullName: _nameCtrl.text,
+          email: _emailCtrl.text,
+          password: _passCtrl.text,
+        );
     final state = ref.read(authNotifierProvider);
     state.whenOrNull(
       error: (e, _) => setState(() {
-        _error = e is FirebaseAuthException ? friendlyAuthError(e) : 'Настана грешка.';
+        _error = e is FirebaseAuthException
+            ? friendlyAuthError(e)
+            : 'Настана грешка.';
       }),
-      data: (u) { if (u != null && mounted) context.go('/home'); },
+      data: (u) {
+        if (u != null && mounted) context.go('/home');
+      },
     );
   }
 
@@ -71,13 +76,25 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(child: Text('Креирајте нов профил', style: GoogleFonts.nunito(
-                fontSize: 22, fontWeight: FontWeight.w800,
-                color: theme.colorScheme.primary,
-              ))),
-              Center(child: Text('Пополнете ги следните полиња', style: GoogleFonts.nunito(
-                fontSize: 14, color: Colors.grey[600],
-              ))),
+              Center(
+                child: Text(
+                  'Креирајте нов профил',
+                  style: GoogleFonts.nunito(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  'Пополнете ги следните полиња',
+                  style: GoogleFonts.nunito(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ),
               const SizedBox(height: 28),
 
               TextField(
@@ -107,7 +124,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   labelText: 'Лозинка',
                   prefixIcon: const Icon(Icons.lock_outlined),
                   suffixIcon: IconButton(
-                    icon: Icon(_obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined),
+                    icon: Icon(
+                      _obscure
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                    ),
                     onPressed: () => setState(() => _obscure = !_obscure),
                   ),
                 ),
@@ -136,11 +157,22 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.error_outline, color: Colors.red.shade600, size: 18),
+                      Icon(
+                        Icons.error_outline,
+                        color: Colors.red.shade600,
+                        size: 18,
+                      ),
                       const SizedBox(width: 8),
-                      Expanded(child: Text(_error!, style: GoogleFonts.nunito(
-                        color: Colors.red.shade700, fontSize: 13, fontWeight: FontWeight.w600,
-                      ))),
+                      Expanded(
+                        child: Text(
+                          _error!,
+                          style: GoogleFonts.nunito(
+                            color: Colors.red.shade700,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -148,12 +180,19 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               const SizedBox(height: 22),
 
               SizedBox(
-                width: double.infinity, height: 50,
+                width: double.infinity,
+                height: 50,
                 child: ElevatedButton(
                   onPressed: isLoading ? null : _register,
                   child: isLoading
-                      ? const SizedBox(width: 22, height: 22,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
                       : const Text('Регистрирај се'),
                 ),
               ),
@@ -162,13 +201,19 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Веќе имате профил? ', style: GoogleFonts.nunito(color: Colors.grey[600])),
+                  Text(
+                    'Веќе имате профил? ',
+                    style: GoogleFonts.nunito(color: Colors.grey[600]),
+                  ),
                   GestureDetector(
                     onTap: () => context.pop(),
-                    child: Text('Најавете се', style: GoogleFonts.nunito(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.w800,
-                    )),
+                    child: Text(
+                      'Најавете се',
+                      style: GoogleFonts.nunito(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
                   ),
                 ],
               ),

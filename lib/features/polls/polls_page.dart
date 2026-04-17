@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:mis_project/features/polls/poll_model.dart';import 'package:go_router/go_router.dart';
+import 'package:mis_project/features/polls/poll_model.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
-
 import '../../core/themes/app_theme.dart';
-
-
 
 class PollsPage extends ConsumerWidget {
   const PollsPage({super.key});
@@ -30,11 +26,20 @@ class PollsPage extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.poll_outlined, size: 64, color: AppTheme.textMuted),
+                  const Icon(
+                    Icons.poll_outlined,
+                    size: 64,
+                    color: AppTheme.textMuted,
+                  ),
                   const SizedBox(height: 16),
-                  Text('Нема активни анкети', style: GoogleFonts.nunito(
-                    fontSize: 18, fontWeight: FontWeight.w700, color: AppTheme.textMuted,
-                  )),
+                  Text(
+                    'Нема активни анкети',
+                    style: GoogleFonts.nunito(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.textMuted,
+                    ),
+                  ),
                 ],
               ),
             );
@@ -51,79 +56,133 @@ class PollsPage extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8)],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 8,
+                      ),
+                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Header
                       Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: poll.isActive ? AppTheme.primary : AppTheme.textMuted,
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                          color: poll.isActive
+                              ? AppTheme.primary
+                              : AppTheme.textMuted,
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(16),
+                          ),
                         ),
                         child: Row(
                           children: [
-                            const Icon(Icons.how_to_vote_outlined, color: Colors.white, size: 20),
+                            const Icon(
+                              Icons.how_to_vote_outlined,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                             const SizedBox(width: 8),
                             Expanded(
-                              child: Text(poll.question, style: GoogleFonts.nunito(
-                                fontSize: 14, fontWeight: FontWeight.w800, color: Colors.white,
-                              )),
+                              child: Text(
+                                poll.question,
+                                style: GoogleFonts.nunito(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
+                                ),
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      // Body
                       Padding(
                         padding: const EdgeInsets.all(14),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Options preview (first 2)
-                            ...poll.options.take(2).map((o) => Padding(
-                              padding: const EdgeInsets.only(bottom: 6),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 6, height: 6,
-                                    decoration: const BoxDecoration(color: AppTheme.primary, shape: BoxShape.circle),
+                            ...poll.options
+                                .take(2)
+                                .map(
+                                  (o) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 6),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 6,
+                                          height: 6,
+                                          decoration: const BoxDecoration(
+                                            color: AppTheme.primary,
+                                            shape: BoxShape.circle,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Text(
+                                          o.text,
+                                          style: GoogleFonts.nunito(
+                                            fontSize: 13,
+                                            color: AppTheme.textMuted,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Text(o.text, style: GoogleFonts.nunito(fontSize: 13, color: AppTheme.textMuted)),
-                                ],
-                              ),
-                            )),
+                                ),
                             if (poll.options.length > 2)
-                              Text('+ ${poll.options.length - 2} повеќе...', style: GoogleFonts.nunito(
-                                fontSize: 12, color: AppTheme.textMuted,
-                              )),
+                              Text(
+                                '+ ${poll.options.length - 2} повеќе...',
+                                style: GoogleFonts.nunito(
+                                  fontSize: 12,
+                                  color: AppTheme.textMuted,
+                                ),
+                              ),
                             const SizedBox(height: 10),
                             Row(
                               children: [
-                                Icon(Icons.how_to_vote_outlined, size: 14, color: AppTheme.textMuted),
+                                Icon(
+                                  Icons.how_to_vote_outlined,
+                                  size: 14,
+                                  color: AppTheme.textMuted,
+                                ),
                                 const SizedBox(width: 4),
-                                Text('${poll.totalVotes} гласови', style: GoogleFonts.nunito(
-                                  fontSize: 12, fontWeight: FontWeight.w700, color: AppTheme.textMuted,
-                                )),
+                                Text(
+                                  '${poll.totalVotes} гласови',
+                                  style: GoogleFonts.nunito(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppTheme.textMuted,
+                                  ),
+                                ),
                                 const Spacer(),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 4,
+                                  ),
                                   decoration: BoxDecoration(
-                                    color: poll.isActive ? AppTheme.successLight : const Color(0xFFECEFF1),
+                                    color: poll.isActive
+                                        ? AppTheme.successLight
+                                        : const Color(0xFFECEFF1),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Text(
                                     poll.isActive ? 'Активна' : 'Затворена',
                                     style: GoogleFonts.nunito(
-                                      fontSize: 11, fontWeight: FontWeight.w800,
-                                      color: poll.isActive ? AppTheme.success : AppTheme.textMuted,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w800,
+                                      color: poll.isActive
+                                          ? AppTheme.success
+                                          : AppTheme.textMuted,
                                     ),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
-                                Icon(Icons.arrow_forward_ios, size: 14, color: AppTheme.textMuted),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 14,
+                                  color: AppTheme.textMuted,
+                                ),
                               ],
                             ),
                           ],

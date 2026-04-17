@@ -44,12 +44,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  Future<void> _loginAnonymous() async {
-    setState(() => _error = null);
-    await ref.read(authNotifierProvider.notifier).loginAnonymous();
-    if (mounted) context.go('/home');
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -88,7 +82,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
                 const SizedBox(height: 30),
 
-                // Email
                 TextField(
                   controller: _emailCtrl,
                   keyboardType: TextInputType.emailAddress,
@@ -99,7 +92,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
                 const SizedBox(height: 16),
 
-                // Password
                 TextField(
                   controller: _passCtrl,
                   obscureText: _obscure,
@@ -119,7 +111,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ),
                 const SizedBox(height: 12),
 
-                // Error
                 if (_error != null)
                   Container(
                     width: double.infinity,
@@ -153,7 +144,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                 const SizedBox(height: 20),
 
-                // Login button
                 SizedBox(
                   width: double.infinity,
                   height: 50,

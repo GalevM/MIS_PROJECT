@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../themes/app_constants.dart';
 
-
 class NotificationModel {
   final String id;
   final String title;
@@ -51,6 +50,10 @@ final notificationsProvider = StreamProvider<List<NotificationModel>>((ref) {
 });
 
 final unreadNotifCountProvider = Provider<int>((ref) {
-  return ref.watch(notificationsProvider).valueOrNull
-      ?.where((n) => !n.isRead).length ?? 0;
+  return ref
+          .watch(notificationsProvider)
+          .valueOrNull
+          ?.where((n) => !n.isRead)
+          .length ??
+      0;
 });

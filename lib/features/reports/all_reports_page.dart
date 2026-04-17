@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 import '../../core/themes/app_theme.dart';
-import '../auth/auth_provider.dart';
 import 'report_provider.dart';
 
 class AllReportsPage extends ConsumerWidget {
@@ -16,23 +14,18 @@ class AllReportsPage extends ConsumerWidget {
     final reportsAsync = ref.watch(allReportsProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Сите Пријави'),
-      ),
+      appBar: AppBar(title: const Text('Сите Пријави')),
       body: reportsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) =>
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Text('Грешка при вчитување: $e'),
-              ),
-            ),
+        error: (e, _) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Text('Грешка при вчитување: $e'),
+          ),
+        ),
         data: (list) {
           if (list.isEmpty) {
-            return const Center(
-              child: Text('Нема пријави во моментов'),
-            );
+            return const Center(child: Text('Нема пријави во моментов'));
           }
 
           return RefreshIndicator(
@@ -50,15 +43,17 @@ class AllReportsPage extends ConsumerWidget {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border(left: BorderSide(
-                        color: report.status.statusColor,
-                        width: 4,
-                      )),
+                      border: Border(
+                        left: BorderSide(
+                          color: report.status.statusColor,
+                          width: 4,
+                        ),
+                      ),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.05),
                           blurRadius: 6,
-                        )
+                        ),
                       ],
                     ),
                     child: Padding(
@@ -115,8 +110,9 @@ class AllReportsPage extends ConsumerWidget {
                                     ),
                                     const SizedBox(width: 10),
                                     Text(
-                                      DateFormat('dd.MM.yyyy').format(
-                                          report.createdAt),
+                                      DateFormat(
+                                        'dd.MM.yyyy',
+                                      ).format(report.createdAt),
                                       style: GoogleFonts.nunito(
                                         fontSize: 12,
                                         color: AppTheme.textMuted,
@@ -137,7 +133,7 @@ class AllReportsPage extends ConsumerWidget {
                                 height: 56,
                                 fit: BoxFit.cover,
                                 errorBuilder: (_, __, ___) =>
-                                const SizedBox(width: 56, height: 56),
+                                    const SizedBox(width: 56, height: 56),
                               ),
                             ),
                         ],

@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../../core/themes/app_constants.dart';
 import '../auth/auth_provider.dart';
-
-
 
 class PollOption {
   final String id;
@@ -56,7 +53,6 @@ class PollModel {
   int get totalVotes => options.fold(0, (sum, o) => sum + o.votes);
 }
 
-// All polls
 final pollsProvider = StreamProvider<List<PollModel>>((ref) {
   return FirebaseFirestore.instance
       .collection(AppConstants.pollsCol)
@@ -65,7 +61,6 @@ final pollsProvider = StreamProvider<List<PollModel>>((ref) {
       .map((s) => s.docs.map(PollModel.fromFirestore).toList());
 });
 
-// Single poll
 final pollByIdProvider = StreamProvider.family<PollModel?, String>((ref, id) {
   return FirebaseFirestore.instance
       .collection(AppConstants.pollsCol)
@@ -74,8 +69,10 @@ final pollByIdProvider = StreamProvider.family<PollModel?, String>((ref, id) {
       .map((s) => s.exists ? PollModel.fromFirestore(s) : null);
 });
 
-// Has user voted on a poll
-final hasVotedProvider = FutureProvider.family<String?, String>((ref, pollId) async {
+final hasVotedProvider = FutureProvider.family<String?, String>((
+  ref,
+  pollId,
+) async {
   final user = ref.watch(currentUserProvider);
   if (user == null) return null;
   final doc = await FirebaseFirestore.instance
@@ -88,7 +85,6 @@ final hasVotedProvider = FutureProvider.family<String?, String>((ref, pollId) as
   return doc.data()?['optionId'] as String?;
 });
 
-// Vote action
 Future<void> voteOnPoll({
   required String pollId,
   required String optionId,
@@ -96,19 +92,22 @@ Future<void> voteOnPoll({
 }) async {
   final batch = FirebaseFirestore.instance.batch();
 
-  // Record the vote
   final voteRef = FirebaseFirestore.instance
       .collection(AppConstants.pollsCol)
       .doc(pollId)
       .collection(AppConstants.pollVotesCol)
       .doc(uid);
-  batch.set(voteRef, {'optionId': optionId, 'votedAt': FieldValue.serverTimestamp()});
+  batch.set(voteRef, {
+    'optionId': optionId,
+    'votedAt': FieldValue.serverTimestamp(),
+  });
 
-  // Increment option votes — we use a transaction for this
   await batch.commit();
 
   await FirebaseFirestore.instance.runTransaction((tx) async {
-    final pollRef = FirebaseFirestore.instance.collection(AppConstants.pollsCol).doc(pollId);
+    final pollRef = FirebaseFirestore.instance
+        .collection(AppConstants.pollsCol)
+        .doc(pollId);
     final pollSnap = await tx.get(pollRef);
     final data = pollSnap.data()!;
     final options = (data['options'] as List<dynamic>)
@@ -122,6 +121,5 @@ Future<void> voteOnPoll({
     tx.update(pollRef, {'options': options});
   });
 
-  // Award points
   await addPoints(uid, AppConstants.pointsVote);
 }

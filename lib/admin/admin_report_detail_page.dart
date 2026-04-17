@@ -75,7 +75,6 @@ class _AdminReportDetailPageState
             return const Center(child: Text('Пријавата не е пронајдена'));
           }
 
-          // Pre-fill admin note once
           if (!_notePrefilled) {
             _noteCtrl.text = r.adminNote ?? '';
             _notePrefilled = true;
@@ -86,7 +85,6 @@ class _AdminReportDetailPageState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ── Current status banner ─────────────────────────────
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -118,7 +116,6 @@ class _AdminReportDetailPageState
 
                 const SizedBox(height: 16),
 
-                // ── Change status ─────────────────────────────────────
                 _secLabel('Промени статус'),
                 const SizedBox(height: 10),
                 Row(children: [
@@ -146,7 +143,6 @@ class _AdminReportDetailPageState
 
                 const SizedBox(height: 16),
 
-                // ── Admin note ────────────────────────────────────────
                 _secLabel('Белешка за граѓанинот'),
                 const SizedBox(height: 8),
                 TextField(
@@ -177,8 +173,6 @@ class _AdminReportDetailPageState
                 ),
 
                 const SizedBox(height: 20),
-
-                // ── Report details ────────────────────────────────────
                 _secLabel('Детали'),
                 const SizedBox(height: 10),
                 Container(
@@ -211,7 +205,6 @@ class _AdminReportDetailPageState
                   ]),
                 ),
 
-                // ── Images ────────────────────────────────────────────
                 if (r.imageUrls.isNotEmpty) ...[
                   const SizedBox(height: 16),
                   _secLabel('Слики (${r.imageUrls.length})'),
@@ -235,7 +228,6 @@ class _AdminReportDetailPageState
                   ),
                 ],
 
-                // ── Map ───────────────────────────────────────────────
                 if (r.latitude != 0 && r.longitude != 0) ...[
                   const SizedBox(height: 16),
                   _secLabel('Локација на мапа'),
@@ -288,7 +280,6 @@ class _AdminReportDetailPageState
                     ),
                   ),
                 ],
-
                 const SizedBox(height: 24),
               ],
             ),
@@ -323,8 +314,6 @@ class _AdminReportDetailPageState
     );
   }
 }
-
-// ── Small widgets ─────────────────────────────────────────────────────────────
 
 class _StatusBtn extends StatelessWidget {
   final String label, emoji;

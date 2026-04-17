@@ -4,17 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../core/themes/app_constants.dart';
 
-// Current user stream
 final authStateProvider = StreamProvider<User?>((ref) {
   return FirebaseAuth.instance.authStateChanges();
 });
 
-// Current user (sync)
 final currentUserProvider = Provider<User?>((ref) {
   return ref.watch(authStateProvider).valueOrNull;
 });
 
-// Auth notifier
 class AuthNotifier extends AsyncNotifier<User?> {
   @override
   Future<User?> build() async {
@@ -44,14 +41,17 @@ class AuthNotifier extends AsyncNotifier<User?> {
         password: password.trim(),
       );
       final uid = cred.user!.uid;
-      await FirebaseFirestore.instance.collection(AppConstants.usersCol).doc(uid).set({
-        'fullName': fullName.trim(),
-        'email': email.trim(),
-        'role': AppConstants.roleUser,
-        'points': 0,
-        'createdAt': FieldValue.serverTimestamp(),
-        'fcmToken': null,
-      });
+      await FirebaseFirestore.instance
+          .collection(AppConstants.usersCol)
+          .doc(uid)
+          .set({
+            'fullName': fullName.trim(),
+            'email': email.trim(),
+            'role': AppConstants.roleUser,
+            'points': 0,
+            'createdAt': FieldValue.serverTimestamp(),
+            'fcmToken': null,
+          });
       return cred.user;
     });
   }
@@ -70,10 +70,14 @@ class AuthNotifier extends AsyncNotifier<User?> {
   }
 }
 
-final authNotifierProvider = AsyncNotifierProvider<AuthNotifier, User?>(AuthNotifier.new);
+final authNotifierProvider = AsyncNotifierProvider<AuthNotifier, User?>(
+  AuthNotifier.new,
+);
 
-// User Firestore data
-final userDocProvider = StreamProvider.family<Map<String, dynamic>?, String>((ref, uid) {
+final userDocProvider = StreamProvider.family<Map<String, dynamic>?, String>((
+  ref,
+  uid,
+) {
   return FirebaseFirestore.instance
       .collection(AppConstants.usersCol)
       .doc(uid)
@@ -81,7 +85,6 @@ final userDocProvider = StreamProvider.family<Map<String, dynamic>?, String>((re
       .map((s) => s.data());
 });
 
-// Current user Firestore data
 final currentUserDocProvider = StreamProvider<Map<String, dynamic>?>((ref) {
   final user = ref.watch(currentUserProvider);
   if (user == null) return Stream.value(null);
@@ -92,7 +95,6 @@ final currentUserDocProvider = StreamProvider<Map<String, dynamic>?>((ref) {
       .map((s) => s.data());
 });
 
-// Add points helper
 Future<void> addPoints(String uid, int points) async {
   await FirebaseFirestore.instance
       .collection(AppConstants.usersCol)
@@ -100,7 +102,6 @@ Future<void> addPoints(String uid, int points) async {
       .update({'points': FieldValue.increment(points)});
 }
 
-// Friendly error messages
 String friendlyAuthError(FirebaseAuthException e) {
   return switch (e.code) {
     'email-already-in-use' => 'Веќе постои акаунт со тој e-маил.',
