@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../../admin/admin_provider.dart';
 import '../themes/app_theme.dart';
 import 'notification_model.dart';
 
@@ -13,11 +14,19 @@ class NotificationsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifs = ref.watch(notificationsProvider);
+    final isAdmin = ref.watch(isAdminProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Известувања'),
         leading: BackButton(onPressed: () => context.pop()),
+        actions: [
+          if (isAdmin)
+            IconButton(
+              icon: const Icon(Icons.person_outlined),
+              onPressed: () => context.go('/admin'),
+            ),
+        ],
       ),
       body: notifs.when(
         loading: () => const Center(child: CircularProgressIndicator()),

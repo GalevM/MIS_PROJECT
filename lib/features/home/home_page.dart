@@ -14,6 +14,7 @@ class HomePage extends ConsumerWidget {
     final theme = Theme.of(context);
     final userDoc = ref.watch(currentUserDocProvider);
     final stats = ref.watch(reportsStatsProvider);
+    final isAdmin = ref.watch(isAdminProvider);
 
     final userName =
         userDoc.valueOrNull?['fullName']?.toString().split(' ').first ??
@@ -30,10 +31,11 @@ class HomePage extends ConsumerWidget {
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.person_outlined),
-            onPressed: () => context.go('/admin'),
-          ),
+          if (isAdmin)
+            IconButton(
+              icon: const Icon(Icons.person_outlined),
+              onPressed: () => context.go('/admin'),
+            ),
         ],
       ),
       body: RefreshIndicator(
@@ -254,7 +256,7 @@ class _StatCard extends StatelessWidget {
             border: Border(left: BorderSide(color: color, width: 3)),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, // центрира содржина
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, color: color, size: 28),
               const SizedBox(height: 8),

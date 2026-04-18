@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mis_project/features/polls/poll_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../admin/admin_provider.dart';
 import '../../core/themes/app_theme.dart';
 
 class PollsPage extends ConsumerWidget {
@@ -11,11 +12,19 @@ class PollsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final polls = ref.watch(pollsProvider);
+    final isAdmin = ref.watch(isAdminProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Анкети'),
         leading: BackButton(onPressed: () => context.pop()),
+        actions: [
+          if (isAdmin)
+            IconButton(
+              icon: const Icon(Icons.person_outlined),
+              onPressed: () => context.go('/admin'),
+            ),
+        ],
       ),
       body: polls.when(
         loading: () => const Center(child: CircularProgressIndicator()),

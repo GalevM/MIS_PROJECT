@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../core/themes/app_constants.dart';
 
@@ -116,3 +116,8 @@ String friendlyAuthError(FirebaseAuthException e) {
     _ => 'Настана грешка. Обидете се повторно.',
   };
 }
+
+final isAdminProvider = Provider<bool>((ref) {
+  final userDoc = ref.watch(currentUserDocProvider);
+  return userDoc.valueOrNull?['role'] == AppConstants.roleAdmin;
+});

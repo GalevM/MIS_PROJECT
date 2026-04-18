@@ -20,9 +20,17 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userDoc = ref.watch(currentUserDocProvider);
     final myReports = ref.watch(myReportsProvider);
+    final isAdmin = ref.watch(isAdminProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Мој Профил')),
+      appBar: AppBar(title: const Text('Мој Профил'),
+        actions: [
+          if (isAdmin)
+            IconButton(
+              icon: const Icon(Icons.person_outlined),
+              onPressed: () => context.go('/admin'),
+            ),
+        ],),
       body: userDoc.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Грешка: $e')),
@@ -275,7 +283,6 @@ class ProfilePage extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
-                      // Admin button — only for admins
                       if (isAdmin) ...[
                         SizedBox(
                           width: double.infinity,

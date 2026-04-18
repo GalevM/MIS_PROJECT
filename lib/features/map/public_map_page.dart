@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mis_project/core/themes/app_theme.dart';
+import '../../admin/admin_provider.dart';
 import '../../core/models/report_model.dart';
 import '../../core/themes/app_constants.dart';
 import '../reports/report_provider.dart';
@@ -177,9 +178,17 @@ class _MapPageState extends ConsumerState<MapPage> {
     final reportsAsync = ref.watch(filteredReportsProvider);
     final catFilter = ref.watch(categoryFilterProvider);
     final statusFilter = ref.watch(statusFilterProvider);
+    final isAdmin = ref.watch(isAdminProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Јавна Мапа')),
+      appBar: AppBar(title: const Text('Јавна Мапа'),
+        actions: [
+          if (isAdmin)
+            IconButton(
+              icon: const Icon(Icons.person_outlined),
+              onPressed: () => context.go('/admin'),
+            ),
+        ],),
 
       bottomNavigationBar: Container(
         color: Colors.white,

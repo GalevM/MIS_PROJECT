@@ -4,14 +4,11 @@ import '../../core/models/report_model.dart';
 import '../../core/themes/app_constants.dart';
 import '../features/auth/auth_provider.dart';
 
-final isAdminProvider = StreamProvider<bool>((ref) {
+final isAdminProvider = Provider<bool>((ref) {
   final user = ref.watch(currentUserProvider);
-  if (user == null) return Stream.value(false);
-  return FirebaseFirestore.instance
-      .collection(AppConstants.usersCol)
-      .doc(user.uid)
-      .snapshots()
-      .map((s) => s.data()?['role'] == 'admin');
+  if (user == null) return false;
+  final userDoc = ref.watch(userDocProvider(user.uid));
+  return userDoc.valueOrNull?['role'] == AppConstants.roleAdmin;
 });
 
 class AdminStats {

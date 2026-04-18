@@ -15,16 +15,16 @@ void main() async {
   runApp(const ProviderScope(child: OpshtinaApp()));
 }
 
-class OpshtinaApp extends StatelessWidget {
+class OpshtinaApp extends ConsumerWidget {
   const OpshtinaApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
       title: 'Општина Карпош',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      routerConfig: appRouter,
+      routerConfig: ref.watch(appRouterProvider),
     );
   }
 }

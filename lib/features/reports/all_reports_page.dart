@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import '../../admin/admin_provider.dart';
 import '../../core/themes/app_theme.dart';
 import 'report_provider.dart';
 
@@ -12,9 +13,18 @@ class AllReportsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final reportsAsync = ref.watch(allReportsProvider);
+    final isAdmin = ref.watch(isAdminProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Сите Пријави')),
+      appBar: AppBar(title: const Text('Сите Пријави'),
+        actions: [
+          if (isAdmin)
+            IconButton(
+              icon: const Icon(Icons.person_outlined),
+              onPressed: () => context.go('/admin'),
+            ),
+        ],
+      ),
       body: reportsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
